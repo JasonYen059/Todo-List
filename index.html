@@ -71,6 +71,14 @@
     overflow: hidden;
     }
 
+    #todayDate {
+      position: absolute;
+      top: 0px;
+      font-size: 20px;
+      color: white;
+      opacity: 60%;
+    }
+
     #motor, #motor2{
         width: 280px;
         height: auto;
@@ -111,6 +119,7 @@
       position: absolute;
       z-index: 1;
     }
+
 
     .temp {
       width: 100px;
@@ -207,6 +216,7 @@
   </form>
 
   <div id="mainPicture">
+    <p id="todayDate"></p>
     <span class="temp">27 °</span>
     <img id="sun" src="sun.png">
     <img id="rain" src="rain.gif">
@@ -221,30 +231,35 @@
       <span> <p id="rainData"></p>%</span>
     </div>
     <div id="wetInfo">
-      <span><i class="fas fa-tint" style="color: rgb(7, 93, 221);"></i> </span>
+      <span><i class="fas fa-tint" style="color: rgb(255, 255, 255);"></i> </span>
       <span><p id="wetData"></p>%</span>
     </div>
   </div>
 
   <div id="weekWeather">
     <div class="showWeek">
-      <span><i class="fas fa-sun"></i> Mon</span>
+      <i class="fas fa-sun"></i>
+      <span id="1stDay">Mon</span>
     </div>
 
     <div class="showWeek">
-      <span><i class="fas fa-sun"></i> Tue</span>
+      <i class="fas fa-sun"></i>
+      <span id="2ndDay">Tue</span>
     </div>
 
     <div class="showWeek">
-      <span><i class="fas fa-sun"></i> Wed</span>
+      <i class="fas fa-sun"></i>
+      <span id="3rdDay">Wed</span>
     </div>
 
     <div class="showWeek">
-      <span><i class="fas fa-cloud"></i> Thu</span>
+      <i class="fas fa-cloud"></i>
+      <span id="4thDay">Thu</span>
     </div>
 
     <div class="showWeek">
-      <span><i class="fas fa-cloud"></i> Fri</span>
+      <i class="fas fa-cloud"></i>
+      <span id="5thDay">Fri</span>
     </div>
   </div>
 
@@ -261,12 +276,34 @@
 
     <script type="text/javascript">
 
+    let today = new Date();
+    let h = ('0'+today.getHours()).substr(-2);
+    let m = ('0'+today.getMinutes()).substr(-2);
+    $("#recent").text(`現在時間   ${h} : ${m}`);
+    let days = today.getDay();
+    let todayDate = ((today.getFullYear())+' .'+('0'+today.getMonth()).substr(-2) +' .'+ ('0'+today.getDate()).substr(-2));
+    let datem = ('0'+today.getMonth()).substr(-2)
+    console.log(datem);
     
 
-    var today = new Date();
-    var h = ('0'+today.getHours()).substr(-2);
-    var m = ('0'+today.getMinutes()).substr(-2);
-    $("#recent").text(`現在時間   ${h} : ${m}`);
+
+    
+    changeDays();
+
+      function changeDays(e){
+        let weekday = new Array(7);
+          weekday[0]="SUN";
+          weekday[1]="MON";
+          weekday[2]="TUE";
+          weekday[3]="WED";
+          weekday[4]="THU";
+          weekday[5]="FRI";
+          weekday[6]="SAT";
+          // console.log(weekday[days]);
+
+          
+      }
+
 
     getWeatherInfo();
     changePic();
@@ -283,32 +320,44 @@
           let todayRain = gotData.weatherElement[0].time[0].elementValue[0].value;
           let todayTemp = gotData.weatherElement[1].time[0].elementValue[0].value;
           let todayWet = gotData.weatherElement[2].time[0].elementValue[0].value;
+          let todayStatus = gotData.weatherElement[6].time[0].elementValue[0].value;
+          let todayStatusValue = gotData.weatherElement[6].time[0].elementValue[1].value;
+
+          console.log(gotData);
 
           $(".temp").text(`${todayTemp} °`);
           $("#rainData").text(`${todayRain} `);
           $("#wetData").text(`${todayWet} `);
+          $("#todayDate").text(todayStatus);
+          $("#todayDate").val(todayStatusValue);
           changePic();
+
         }
       });
     }
 
-    console.log($("#rainData").text());
-
+    
     function changePic(){
-      if ($("#rainData").text() >= 20 ){
+      if ($("#todayDate").val() >= 8 ){
       $("#motor").hide();
       $("#motor2").show();
       $("#weatherApp").css("background-color","#6F6F6F");
       $("#sun").hide();
       $("#rain").show();
-    } else {
+    } else if ($("#todayDate").val() <= 3) {
       $("#motor").show();
       $("#motor2").hide();
       $("#weatherApp").css("background-color","#339999");
       $("#sun").show();
       $("#rain").hide();
+    } else if ($("#todayDate").val() >3 && $("#todayDate").val()<8) {
+      $("#motor").show();
+      $("#motor2").hide();
+      $("#weatherApp").css("background-color","#339999");
+      $("#sun").hide();
+      $("#rain").hide();
     }
-    }
+  }
     
     
 
