@@ -25,7 +25,8 @@
     }
 
     body {
-    background: linear-gradient( rgb(206, 206, 206), #3a6697);
+    /* background: linear-gradient( rgb(206, 206, 206), #3a6697); */
+    background-color: #f5f5f5;
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -35,7 +36,7 @@
     #weatherApp{
       width: 300px;
       height: 500px;
-      background-color: rgb(30, 155, 155);
+      background-color: #339999;
       border-radius: 10px;
     }
 
@@ -62,8 +63,7 @@
       width: 300px;
       height: 280px;
       margin: auto;
-      border-radius: 10px;
-      background-color: white;
+      /* background-color: #339999; */
       display: flex;
     justify-content: center;
     align-items: center;
@@ -71,21 +71,22 @@
     overflow: hidden;
     }
 
-    #motor{
+    #motor, #motor2{
         width: 280px;
         height: auto;
         border-radius: 10px;
-        box-shadow: 5px 5px rgb(58, 57, 57);
+        /* box-shadow: 5px 5px rgb(58, 57, 57); */
       }
+
     #sun{
       width: 70px;
       height: auto;
       position: absolute;
       right: 20px;
-      top: 40px;
+      top: 30px;
       z-index: 1;
       animation-name: sunny;
-      animation-duration: 2s;
+      animation-duration: 1s;
     }
 
     @keyframes sunny{
@@ -93,63 +94,67 @@
         top: -80px;
       }
       50%{
-        top: 50px;
+        top: 40px;
       }
       75%{
-        top: 30px;
+        top: 20px;
       }
       100%{
-        top: 40px;
+        top: 30px;
         transform: rotate(360deg);
       }
     }
 
+    #rain {
+      width: 100%;
+      height: 230px;
+      position: absolute;
+      z-index: 1;
+    }
+
     .temp {
-      width: 120px;
-      height: 35px;
+      width: 100px;
+      height: 40px;
       padding: 5px;
       text-align:center ;
-      font-size: 23px;
+      font-size: 35px;
       position: absolute;
-      left: 90px;
-      bottom: 20px;
+      left: 110px;
+      bottom: 15px;
       color: rgb(255, 255, 255);
-      border-radius: 25px;
-      box-shadow: 3px 3px rgb(58, 57, 57);;
+      text-shadow: 2px 2px black;
       font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
 
     #rainWind{
       width: 300px;
-      height: 50px;
-      margin-top: 10px;
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
     #rainInfo , #wetInfo {
-      width: 130px;
-      height: 50px;
-      float: left;
+      width: 100px;
       text-align: center;
-      background-color: white;
-      border-radius: 10px;
       display: flex;
       justify-content: center;
       align-items: center;
       font-size: 20px;
+      color: white;
+      text-shadow: 2px 1px black;;
     }
 
-    #wetInfo {
-      margin-left: 20px;
+    #rainData , #wetData{
+      margin: 0 10px;
+      float: left;
     }
+
 
     #weekWeather {
       width: 280px;
-      height: 60px;
+      height: 80px;
       background-color: white;
-      margin: 10px auto;
+      margin: 20px 10px 10px 10px;
       border-radius: 10px;
       display: flex;
       justify-content:space-between;
@@ -192,28 +197,32 @@
 
 <div id="weatherApp">
   <form >
-    <select id="location">
-      <option value="">台 北</option>
-      <option value="">台 中</option>
-      <option value="">嘉 義</option>
-      <option value="">台 南</option>
-      <option value="">高 雄</option>
+    <select id="location" onchange="getWeatherInfo()">
+      <option value="臺北市">台 北</option>
+      <option value="臺中市">台 中</option>
+      <option value="嘉義市">嘉 義</option>
+      <option value="臺南市">台 南</option>
+      <option value="高雄市">高 雄</option>
     </select>
   </form>
 
   <div id="mainPicture">
-    <span class="temp">27 ℃</span>
+    <span class="temp">27 °</span>
     <img id="sun" src="sun.png">
+    <img id="rain" src="rain.gif">
     <img id="motor" src="riding1.gif">
+    <img id="motor2" src="riding2.gif">
 
   </div>
 
   <div id="rainWind">
     <div id="rainInfo">
-      <span><i class="fas fa-cloud-showers-heavy" style="color: rgb(112, 124, 143);"></i> 60 %</span>
+      <span><i class="fas fa-cloud-showers-heavy" style="color: rgb(255, 255, 255);"></i></span>
+      <span> <p id="rainData">60</p>%</span>
     </div>
     <div id="wetInfo">
-      <span><i class="fas fa-tint" style="color: rgb(0, 79, 197);"></i> 75 %</span>
+      <span><i class="fas fa-tint" style="color: rgb(7, 93, 221);"></i> </span>
+      <span><p id="rainData">75</p>%</span>
     </div>
   </div>
 
@@ -252,10 +261,56 @@
 
     <script type="text/javascript">
 
+    
+
     var today = new Date();
     var h = ('0'+today.getHours()).substr(-2);
     var m = ('0'+today.getMinutes()).substr(-2);
     $("#recent").text(`現在時間   ${h} : ${m}`);
+
+    getWeatherInfo();
+    changePic();
+
+    function getWeatherInfo(){
+      let chooseLocation = $("#location").val();
+
+      $.ajax({
+        type: 'GET',
+        url: `https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=CWB-7EA478CF-89E4-4AC4-9C3A-56EC6ABA6354&format=JSON&locationName=${chooseLocation}`,
+        success: function(data){
+          
+          let gotData = data.records.locations[0].location[0];
+          let todayRain = gotData.weatherElement[0].time[0].elementValue[0].value;
+          let todayTemp = gotData.weatherElement[1].time[0].elementValue[0].value;
+          let todayWet = gotData.weatherElement[2].time[0].elementValue[0].value;
+
+          $(".temp").text(`${todayTemp} °`);
+          $("#rainData").text(`${todayRain} `);
+          $("#wetData").text(`${todayWet} `);
+          changePic();
+        }
+      });
+    }
+
+    console.log($("#rainData").text());
+
+    function changePic(){
+      if ($("#rainData").text() >= 20 ){
+      $("#motor").hide();
+      $("#motor2").show();
+      $("#weatherApp").css("background-color","#6F6F6F");
+      $("#sun").hide();
+      $("#rain").show();
+    } else {
+      $("#motor").show();
+      $("#motor2").hide();
+      $("#weatherApp").css("background-color","#339999");
+      $("#sun").show();
+      $("#rain").hide();
+    }
+    }
+    
+    
 
       
 
