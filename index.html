@@ -60,7 +60,7 @@
 
     #mainPicture{
       width: 300px;
-      height: 300px;
+      height: 280px;
       margin: auto;
       border-radius: 10px;
       background-color: white;
@@ -68,10 +68,11 @@
     justify-content: center;
     align-items: center;
     position: relative;
+    overflow: hidden;
     }
 
     #motor{
-        width: 250px;
+        width: 280px;
         height: auto;
         border-radius: 10px;
         box-shadow: 5px 5px rgb(58, 57, 57);
@@ -83,23 +84,102 @@
       right: 20px;
       top: 40px;
       z-index: 1;
+      animation-name: sunny;
+      animation-duration: 2s;
+    }
+
+    @keyframes sunny{
+      0%{
+        top: -80px;
+      }
+      50%{
+        top: 50px;
+      }
+      75%{
+        top: 30px;
+      }
+      100%{
+        top: 40px;
+        transform: rotate(360deg);
+      }
     }
 
     .temp {
-      width: 90px;
+      width: 120px;
       height: 35px;
       padding: 5px;
       text-align:center ;
       font-size: 23px;
       position: absolute;
-      left: 30px;
-      top: 43px;
-      color: rgb(70, 70, 70);
-      background: #f5f5f5;
+      left: 90px;
+      bottom: 20px;
+      color: rgb(255, 255, 255);
       border-radius: 25px;
       box-shadow: 3px 3px rgb(58, 57, 57);;
-      /* text-shadow: 2px 2px rgb(58, 57, 57); */
       font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    #rainWind{
+      width: 300px;
+      height: 50px;
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #rainInfo , #wetInfo {
+      width: 130px;
+      height: 50px;
+      float: left;
+      text-align: center;
+      background-color: white;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+    }
+
+    #wetInfo {
+      margin-left: 20px;
+    }
+
+    #weekWeather {
+      width: 280px;
+      height: 60px;
+      background-color: white;
+      margin: 10px auto;
+      border-radius: 10px;
+      display: flex;
+      justify-content:space-between;
+      align-items: center;
+      padding: 0 5px;
+    }
+
+    .showWeek {
+      width: 55px;
+      height: 55px;
+      padding: 5px;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .fa-sun{
+      color: rgb(255, 215, 35);
+    }
+
+    .fa-cloud {
+      color: rgb(160, 160, 160);
+    }
+
+    #recentTime{
+      width: 100%;
+      height: 30px;
+      display: flex;
+      justify-content:center;
+      align-items: center;
+      color: white;
     }
 
     
@@ -128,6 +208,41 @@
 
   </div>
 
+  <div id="rainWind">
+    <div id="rainInfo">
+      <span><i class="fas fa-cloud-showers-heavy" style="color: rgb(112, 124, 143);"></i> 60 %</span>
+    </div>
+    <div id="wetInfo">
+      <span><i class="fas fa-tint" style="color: rgb(0, 79, 197);"></i> 75 %</span>
+    </div>
+  </div>
+
+  <div id="weekWeather">
+    <div class="showWeek">
+      <span><i class="fas fa-sun"></i> Mon</span>
+    </div>
+
+    <div class="showWeek">
+      <span><i class="fas fa-sun"></i> Tue</span>
+    </div>
+
+    <div class="showWeek">
+      <span><i class="fas fa-sun"></i> Wed</span>
+    </div>
+
+    <div class="showWeek">
+      <span><i class="fas fa-cloud"></i> Thu</span>
+    </div>
+
+    <div class="showWeek">
+      <span><i class="fas fa-cloud"></i> Fri</span>
+    </div>
+  </div>
+
+  <div id="recentTime">
+    <p id="recent"></p>
+  </div>
+
 </div>
   
 
@@ -136,7 +251,11 @@
         
 
     <script type="text/javascript">
-    
+
+    var today = new Date();
+    var h = ('0'+today.getHours()).substr(-2);
+    var m = ('0'+today.getMinutes()).substr(-2);
+    $("#recent").text(`現在時間   ${h} : ${m}`);
 
       
 
