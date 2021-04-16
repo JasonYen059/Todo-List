@@ -83,7 +83,6 @@
         width: 280px;
         height: auto;
         border-radius: 10px;
-        /* box-shadow: 5px 5px rgb(58, 57, 57); */
       }
 
     #sun{
@@ -181,8 +180,8 @@
     }
 
     .showWeek {
-      width: 53px;
-      height: 53px;
+      width: 50px;
+      height: 50px;
       padding: 5px;
       text-align: center;
       font-size: 16px;
@@ -237,10 +236,22 @@
   <form >
     <select id="location" onchange="getWeatherInfo()">
       <option value="臺北市">台 北</option>
+      <option value="新北市">新 北</option>
+      <option value="桃園市">桃 園</option>
+      <option value="新竹市">新 竹</option>
+      <option value="苗栗縣">苗 栗</option>
       <option value="臺中市">台 中</option>
+      <option value="南投縣">南 投</option>
+      <option value="彰化縣">彰 化</option>
+      <option value="雲林縣">雲 林</option>
       <option value="嘉義市">嘉 義</option>
       <option value="臺南市">台 南</option>
       <option value="高雄市">高 雄</option>
+      <option value="基隆市">基 隆</option>
+      <option value="宜蘭縣">宜 蘭</option>
+      <option value="花蓮縣">花 蓮</option>
+      <option value="臺東縣">台 東</option>
+      <option value="澎湖縣">澎 湖</option>
     </select>
   </form>
 
@@ -369,30 +380,35 @@
 
           $("#week1").click((event)=>{
             event.preventDefault();
+            $(".showWeek").attr("class","showWeek");
             let targets = event.target.getAttribute("value");
             changeWeekInfo(targets);
             });
 
             $("#week2").click((event)=>{
               event.preventDefault();
+              $(".showWeek").attr("class","showWeek");
               let targets = event.target.getAttribute("value");
             changeWeekInfo(targets);
             });
 
             $("#week3").click((event)=>{
               event.preventDefault();
+              $(".showWeek").attr("class","showWeek");
               let targets = event.target.getAttribute("value");
             changeWeekInfo(targets);
             });
 
             $("#week4").click((event)=>{
               event.preventDefault();
+              $(".showWeek").attr("class","showWeek");
               let targets = event.target.getAttribute("value");
             changeWeekInfo(targets);
             });
 
             $("#week5").click((event)=>{
               event.preventDefault();
+              $(".showWeek").attr("class","showWeek");
               let targets = event.target.getAttribute("value");
             changeWeekInfo(targets);
             });
