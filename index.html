@@ -168,35 +168,6 @@
       float: left;
     }
 
-    /* #chooseInfo{
-      width: 280px;
-      height: 30px;
-      margin: 10px 10px 0 10px;
-      display: flex;
-      justify-content:space-between;
-      align-items: center;
-    }
-
-    .infoBtn {
-      width: 80px;
-      height: 20px;
-      color: white;
-      border: none;
-      box-shadow: 2px 1px black;
-      border-radius: 5px;
-      outline: none;
-      margin: auto;
-      background: none;
-      cursor: pointer;
-      transition: 0.5s ease;
-    }
-
-    .infoBtn:hover{
-      background-color: #f5f5f5;
-      color: rgb(68, 68, 68);
-    } */
-
-
     #weekWeather {
       width: 280px;
       height: 60px;
@@ -210,21 +181,30 @@
     }
 
     .showWeek {
-      width: 55px;
-      height: 55px;
+      width: 53px;
+      height: 53px;
       padding: 5px;
       text-align: center;
-      font-size: 18px;
+      font-size: 16px;
       border-radius: 10px;
       transition: 0.5s ease;
       cursor: pointer;
     }
     .showWeek:hover {
-      background-color: rgb(231, 231, 231);
+      background-color: rgb(238, 238, 238);
     }
 
 
-    .fa-sun, .fa-cloud, .fa-cloud-showers-heavy{
+    .chosenWeek {
+      background-color: rgb(255, 255, 255);
+      border: 1px solid rgb(177, 177, 177);
+      box-shadow: 2px 2px black;
+      margin-top: -15px;
+      
+    }
+
+
+    .fa-sun, .fa-cloud, .fa-cloud-showers-heavy, .showWeek span{
       pointer-events: none;
     }
 
@@ -286,38 +266,7 @@
     </div>
   </div>
 
-  <!-- <div id="chooseInfo">
-    <button class="infoBtn" id="btn1">WX</button>
-    <button class="infoBtn" id="btn2">T</button>
-    <button class="infoBtn" id="btn3">POP</button>
-  </div> -->
-
-  <div id="weekWeather">
-    <!-- <div class="showWeek">
-      <i class="fas fa-sun"></i>
-      <span id="1stDay">Mon</span>
-    </div>
-
-    <div class="showWeek">
-      <i class="fas fa-sun"></i>
-      <span id="2ndDay">Tue</span>
-    </div>
-
-    <div class="showWeek">
-      <i class="fas fa-sun"></i>
-      <span id="3rdDay">Wed</span>
-    </div>
-
-    <div class="showWeek">
-      <i class="fas fa-cloud"></i>
-      <span id="4thDay">Thu</span>
-    </div>
-
-    <div class="showWeek">
-      <i class="fas fa-cloud"></i>
-      <span id="5thDay">Fri</span>
-    </div> -->
-  </div>
+  <div id="weekWeather"></div>
 
   <div id="recentTime">
     <p id="recent"></p>
@@ -401,11 +350,8 @@
             </div>`)
             }
           }
-          $("#week1").click((event)=>{
-            event.preventDefault();
-            let targets = event.target.getAttribute("value");
-            changeWeekInfo(targets);
-            function changeWeekInfo(e) {
+
+          function changeWeekInfo(e) {
               let XRain = gotData.weatherElement[0].time[e*2].elementValue[0].value;
               let XTemp = gotData.weatherElement[1].time[e*2].elementValue[0].value;
               let XWet = gotData.weatherElement[2].time[e*2].elementValue[0].value;
@@ -418,7 +364,37 @@
           $("#todayDate").text(XStatus);
           $("#todayDate").val(XStatusValue);
           changePic();
-            }
+          $(`#week${e}`).toggleClass("chosenWeek");
+        }
+
+          $("#week1").click((event)=>{
+            event.preventDefault();
+            let targets = event.target.getAttribute("value");
+            changeWeekInfo(targets);
+            });
+
+            $("#week2").click((event)=>{
+              event.preventDefault();
+              let targets = event.target.getAttribute("value");
+            changeWeekInfo(targets);
+            });
+
+            $("#week3").click((event)=>{
+              event.preventDefault();
+              let targets = event.target.getAttribute("value");
+            changeWeekInfo(targets);
+            });
+
+            $("#week4").click((event)=>{
+              event.preventDefault();
+              let targets = event.target.getAttribute("value");
+            changeWeekInfo(targets);
+            });
+
+            $("#week5").click((event)=>{
+              event.preventDefault();
+              let targets = event.target.getAttribute("value");
+            changeWeekInfo(targets);
             });
         }
           
