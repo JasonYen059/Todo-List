@@ -120,6 +120,16 @@
       z-index: 1;
     }
 
+    #wind {
+      width: 100%;
+      height: 200px;
+      top: 15px;
+      opacity: 60%;
+      transform: rotate(-90deg);
+      position: absolute;
+      z-index: 1;
+    }
+
 
     .temp {
       width: 100px;
@@ -158,12 +168,40 @@
       float: left;
     }
 
+    #chooseInfo{
+      width: 280px;
+      height: 30px;
+      margin: 10px 10px 0 10px;
+      display: flex;
+      justify-content:space-between;
+      align-items: center;
+    }
+
+    .infoBtn {
+      width: 80px;
+      height: 20px;
+      color: white;
+      border: none;
+      box-shadow: 2px 1px black;
+      border-radius: 5px;
+      outline: none;
+      margin: auto;
+      background: none;
+      cursor: pointer;
+      transition: 0.5s ease;
+    }
+
+    .infoBtn:hover{
+      background-color: #f5f5f5;
+      color: rgb(68, 68, 68);
+    }
+
 
     #weekWeather {
       width: 280px;
-      height: 80px;
+      height: 60px;
       background-color: white;
-      margin: 20px 10px 10px 10px;
+      margin: 5px 10px 10px 10px;
       border-radius: 10px;
       display: flex;
       justify-content:space-between;
@@ -220,6 +258,7 @@
     <span class="temp">27 °</span>
     <img id="sun" src="sun.png">
     <img id="rain" src="rain.gif">
+    <img id="wind" src="wind.gif">
     <img id="motor" src="riding1.gif">
     <img id="motor2" src="riding2.gif">
 
@@ -234,6 +273,12 @@
       <span><i class="fas fa-tint" style="color: rgb(255, 255, 255);"></i> </span>
       <span><p id="wetData"></p>%</span>
     </div>
+  </div>
+
+  <div id="chooseInfo">
+    <button class="infoBtn" id="btn1">WX</button>
+    <button class="infoBtn" id="btn2">T</button>
+    <button class="infoBtn" id="btn3">POP</button>
   </div>
 
   <div id="weekWeather">
@@ -267,12 +312,7 @@
     <p id="recent"></p>
   </div>
 
-</div>
-  
-
-  
-  
-        
+</div> 
 
     <script type="text/javascript">
 
@@ -281,33 +321,23 @@
     let m = ('0'+today.getMinutes()).substr(-2);
     $("#recent").text(`現在時間   ${h} : ${m}`);
     let days = today.getDay();
-    let todayDate = ((today.getFullYear())+' .'+('0'+today.getMonth()).substr(-2) +' .'+ ('0'+today.getDate()).substr(-2));
-    let datem = ('0'+today.getMonth()).substr(-2)
-    console.log(datem);
-    
-
-
-    
-    changeDays();
-
-      function changeDays(e){
-        let weekday = new Array(7);
-          weekday[0]="SUN";
-          weekday[1]="MON";
-          weekday[2]="TUE";
-          weekday[3]="WED";
-          weekday[4]="THU";
-          weekday[5]="FRI";
-          weekday[6]="SAT";
-          // console.log(weekday[days]);
-
-          
-      }
-
-
+    let todayM = ('0'+(today.getMonth()+1)).substr(-2);
+    let todayD = ('0'+today.getDate()).substr(-2);
+    let todayDate = `${today.getFullYear()}-${todayM}-${todayD}`;
+    // let datem = ('0'+today.getMonth()).substr(-2)
+    console.log(todayDate); 
+    let weekday = new Array(7);
+      weekday[0]="SUN";
+      weekday[1]="MON";
+      weekday[2]="TUE";
+      weekday[3]="WED";
+      weekday[4]="THU";
+      weekday[5]="FRI";
+      weekday[6]="SAT";
+      
     getWeatherInfo();
     changePic();
-
+// ----------------------------AJAX start---------------------------------
     function getWeatherInfo(){
       let chooseLocation = $("#location").val();
 
@@ -322,8 +352,48 @@
           let todayWet = gotData.weatherElement[2].time[0].elementValue[0].value;
           let todayStatus = gotData.weatherElement[6].time[0].elementValue[0].value;
           let todayStatusValue = gotData.weatherElement[6].time[0].elementValue[1].value;
-
+          
           console.log(gotData);
+          
+          
+          $("#weekWeather").text("");
+          setWeekWeather();
+          function setWeekWeather(){
+
+          for (var i =1 ; i < 6 ; i++){
+            let wxValue = gotData.weatherElement[6].time[i*2].elementValue[1].value;
+            // ------------------------判斷星期幾-------------------
+            let x = weekday[days+i]
+            if ( (days+i) > 6){
+              x = weekday[days+i-7];
+            }else {
+              x = weekday[days+i];
+            }
+            // --------------判斷對應日期的icon 並添增進去DIV--------------
+            if (wxValue <= 3 ){
+              $("#weekWeather").append(`
+            <div class="showWeek">
+              <i class="fas fa-sun"></i>
+              <span>${x}</span>
+            </div>`)
+            } else if (wxValue >= 8){
+              $("#weekWeather").append(`
+            <div class="showWeek">
+              <i class="fas fa-cloud-showers-heavy"></i>
+              <span>${x}</span>
+            </div>`)
+            } else if (wxValue >3 && wxValue <8){
+              $("#weekWeather").append(`
+            <div class="showWeek">
+              <i class="fas fa-cloud"></i>
+              <span>${x}</span>
+            </div>`)
+            }
+          }
+        }
+          
+
+// ------------------------- 將data 帶入----------------
 
           $(".temp").text(`${todayTemp} °`);
           $("#rainData").text(`${todayRain} `);
@@ -335,6 +405,7 @@
         }
       });
     }
+    // --------------------------AJAX End------------------------------
 
     
     function changePic(){
@@ -344,18 +415,21 @@
       $("#weatherApp").css("background-color","#6F6F6F");
       $("#sun").hide();
       $("#rain").show();
+      $("#wind").hide();
     } else if ($("#todayDate").val() <= 3) {
       $("#motor").show();
       $("#motor2").hide();
       $("#weatherApp").css("background-color","#339999");
       $("#sun").show();
       $("#rain").hide();
+      $("#wind").hide();
     } else if ($("#todayDate").val() >3 && $("#todayDate").val()<8) {
-      $("#motor").show();
-      $("#motor2").hide();
-      $("#weatherApp").css("background-color","#339999");
+      $("#motor").hide();
+      $("#motor2").show();
+      $("#weatherApp").css("background-color","#6F6F6F");
       $("#sun").hide();
       $("#rain").hide();
+      $("#wind").show();
     }
   }
     
