@@ -168,7 +168,7 @@
       float: left;
     }
 
-    #chooseInfo{
+    /* #chooseInfo{
       width: 280px;
       height: 30px;
       margin: 10px 10px 0 10px;
@@ -194,14 +194,14 @@
     .infoBtn:hover{
       background-color: #f5f5f5;
       color: rgb(68, 68, 68);
-    }
+    } */
 
 
     #weekWeather {
       width: 280px;
       height: 60px;
       background-color: white;
-      margin: 5px 10px 10px 10px;
+      margin: 20px 10px 10px 10px;
       border-radius: 10px;
       display: flex;
       justify-content:space-between;
@@ -215,6 +215,17 @@
       padding: 5px;
       text-align: center;
       font-size: 18px;
+      border-radius: 10px;
+      transition: 0.5s ease;
+      cursor: pointer;
+    }
+    .showWeek:hover {
+      background-color: rgb(231, 231, 231);
+    }
+
+
+    .fa-sun, .fa-cloud, .fa-cloud-showers-heavy{
+      pointer-events: none;
     }
 
     .fa-sun{
@@ -275,14 +286,14 @@
     </div>
   </div>
 
-  <div id="chooseInfo">
+  <!-- <div id="chooseInfo">
     <button class="infoBtn" id="btn1">WX</button>
     <button class="infoBtn" id="btn2">T</button>
     <button class="infoBtn" id="btn3">POP</button>
-  </div>
+  </div> -->
 
   <div id="weekWeather">
-    <div class="showWeek">
+    <!-- <div class="showWeek">
       <i class="fas fa-sun"></i>
       <span id="1stDay">Mon</span>
     </div>
@@ -305,7 +316,7 @@
     <div class="showWeek">
       <i class="fas fa-cloud"></i>
       <span id="5thDay">Fri</span>
-    </div>
+    </div> -->
   </div>
 
   <div id="recentTime">
@@ -323,9 +334,9 @@
     let days = today.getDay();
     let todayM = ('0'+(today.getMonth()+1)).substr(-2);
     let todayD = ('0'+today.getDate()).substr(-2);
-    let todayDate = `${today.getFullYear()}-${todayM}-${todayD}`;
+    // let todayDate = `${today.getFullYear()}-${todayM}-${todayD}`;
     // let datem = ('0'+today.getMonth()).substr(-2)
-    console.log(todayDate); 
+    // console.log(todayDate); 
     let weekday = new Array(7);
       weekday[0]="SUN";
       weekday[1]="MON";
@@ -337,8 +348,8 @@
       
     getWeatherInfo();
     changePic();
-// ----------------------------AJAX start---------------------------------
-    function getWeatherInfo(){
+// -------------------------AJAX start---------------------------------
+    function getWeatherInfo(e){
       let chooseLocation = $("#location").val();
 
       $.ajax({
@@ -359,7 +370,7 @@
           $("#weekWeather").text("");
           setWeekWeather();
           function setWeekWeather(){
-
+            
           for (var i =1 ; i < 6 ; i++){
             let wxValue = gotData.weatherElement[6].time[i*2].elementValue[1].value;
             // ------------------------判斷星期幾-------------------
@@ -372,24 +383,43 @@
             // --------------判斷對應日期的icon 並添增進去DIV--------------
             if (wxValue <= 3 ){
               $("#weekWeather").append(`
-            <div class="showWeek">
+            <div class="showWeek" id="week${i}" value="${i}">
               <i class="fas fa-sun"></i>
               <span>${x}</span>
             </div>`)
             } else if (wxValue >= 8){
               $("#weekWeather").append(`
-            <div class="showWeek">
+            <div class="showWeek" id="week${i}" value="${i}">
               <i class="fas fa-cloud-showers-heavy"></i>
               <span>${x}</span>
             </div>`)
             } else if (wxValue >3 && wxValue <8){
               $("#weekWeather").append(`
-            <div class="showWeek">
+            <div class="showWeek" id="week${i}" value="${i}">
               <i class="fas fa-cloud"></i>
               <span>${x}</span>
             </div>`)
             }
           }
+          $("#week1").click((event)=>{
+            event.preventDefault();
+            let targets = event.target.getAttribute("value");
+            changeWeekInfo(targets);
+            function changeWeekInfo(e) {
+              let XRain = gotData.weatherElement[0].time[e*2].elementValue[0].value;
+              let XTemp = gotData.weatherElement[1].time[e*2].elementValue[0].value;
+              let XWet = gotData.weatherElement[2].time[e*2].elementValue[0].value;
+              let XStatus = gotData.weatherElement[6].time[e*2].elementValue[0].value;
+              let XStatusValue = gotData.weatherElement[6].time[e*2].elementValue[1].value;
+
+          $(".temp").text(`${XTemp} °`);
+          $("#rainData").text(`${XRain} `);
+          $("#wetData").text(`${XWet} `);
+          $("#todayDate").text(XStatus);
+          $("#todayDate").val(XStatusValue);
+          changePic();
+            }
+            });
         }
           
 
@@ -432,6 +462,10 @@
       $("#wind").show();
     }
   }
+
+  // ------------------------------點擊星期改變事件----------------------
+  
+  
     
     
 
