@@ -43,27 +43,55 @@
     form{
       width: 300px;
       height: 50px;
+      margin-top: 10px;
       display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    }
+
+    #recentWeather {
+      width: 30px;
+      height: 30px;
+      font-size: 23px;
+      background: none;
+      cursor: pointer;
+      outline: none;
+      border: none;
+      color: white;
+      text-shadow:2px 1px black;
+      margin-right: 10px;
+      position: absolute;
+      left: 14px;
+      opacity: 50%;
+      transition: 0.5s;
+    }
+
+    #recentWeather:hover {
+      opacity: 90%;
+
     }
 
     #location {
       width: 200px;
       height: 30px;
+      margin-left: 10px;
       background-color: #fcf8f8;
-      border:2px solid rgb(73, 73, 73);
+      border:1px solid rgb(197, 197, 197);
       box-sizing: border-box;
       outline: none;
-      border-radius: 5px;
+      border-radius: 10px;
       padding-left: 75px;
+      background: none;
+      color: rgb(0, 0, 0);
+      opacity: 60%;
+    
     }
 
     #mainPicture{
       width: 300px;
       height: 280px;
       margin: auto;
-      /* background-color: #339999; */
       display: flex;
     justify-content: center;
     align-items: center;
@@ -74,6 +102,7 @@
     #todayDate {
       position: absolute;
       top: 0px;
+      margin: 8px auto;
       font-size: 20px;
       color: white;
       opacity: 60%;
@@ -203,7 +232,7 @@
     }
 
 
-    .fa-sun, .fa-cloud, .fa-cloud-showers-heavy, .showWeek span{
+    .fa-sun, .fa-cloud, .fa-cloud-showers-heavy, .showWeek span, .fa-home{
       pointer-events: none;
     }
 
@@ -212,7 +241,13 @@
     }
 
     .fa-cloud {
-      color: rgb(160, 160, 160);
+      color: rgb(206, 206, 206);
+    }
+
+    .fa-cloud-showers-heavy{
+      font-size: 19px;
+      color: rgb(138, 138, 138);
+     
     }
 
     #recentTime{
@@ -222,7 +257,11 @@
       justify-content:center;
       align-items: center;
       color: white;
+      text-shadow:2px 1px black;
+      position: relative;
     }
+
+    
 
     
     </style>    
@@ -234,6 +273,7 @@
 
 <div id="weatherApp">
   <form >
+    <button id="recentWeather"><i class="fas fa-home"></i></button>
     <select id="location" onchange="getWeatherInfo()">
       <option value="臺北市">台 北</option>
       <option value="新北市">新 北</option>
@@ -280,6 +320,7 @@
   <div id="weekWeather"></div>
 
   <div id="recentTime">
+    
     <p id="recent"></p>
   </div>
 
@@ -327,10 +368,10 @@
           console.log(gotData);
           
           
-          $("#weekWeather").text("");
+          // $("#weekWeather").text("");
           setWeekWeather();
           function setWeekWeather(){
-            
+            $("#weekWeather").text("");
           for (var i =1 ; i < 6 ; i++){
             let wxValue = gotData.weatherElement[6].time[i*2].elementValue[1].value;
             // ------------------------判斷星期幾-------------------
@@ -378,40 +419,17 @@
           $(`#week${e}`).toggleClass("chosenWeek");
         }
 
-          $("#week1").click((event)=>{
-            event.preventDefault();
+        $(".showWeek").click((event)=>{
+          event.preventDefault();
             $(".showWeek").attr("class","showWeek");
             let targets = event.target.getAttribute("value");
             changeWeekInfo(targets);
-            });
+          });
 
-            $("#week2").click((event)=>{
-              event.preventDefault();
-              $(".showWeek").attr("class","showWeek");
-              let targets = event.target.getAttribute("value");
-            changeWeekInfo(targets);
-            });
-
-            $("#week3").click((event)=>{
-              event.preventDefault();
-              $(".showWeek").attr("class","showWeek");
-              let targets = event.target.getAttribute("value");
-            changeWeekInfo(targets);
-            });
-
-            $("#week4").click((event)=>{
-              event.preventDefault();
-              $(".showWeek").attr("class","showWeek");
-              let targets = event.target.getAttribute("value");
-            changeWeekInfo(targets);
-            });
-
-            $("#week5").click((event)=>{
-              event.preventDefault();
-              $(".showWeek").attr("class","showWeek");
-              let targets = event.target.getAttribute("value");
-            changeWeekInfo(targets);
-            });
+          $("#recentWeather").click((event)=>{
+            event.preventDefault();
+            getWeatherInfo();
+          });
         }
           
 
