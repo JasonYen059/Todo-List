@@ -47,13 +47,13 @@
       display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
+   
     }
 
     #recentWeather {
       width: 30px;
       height: 30px;
-      font-size: 23px;
+      font-size: 20px;
       background: none;
       cursor: pointer;
       outline: none;
@@ -62,7 +62,7 @@
       text-shadow:2px 1px black;
       margin-right: 10px;
       position: absolute;
-      left: 14px;
+      right: 14px;
       opacity: 50%;
       transition: 0.5s;
     }
@@ -206,6 +206,7 @@
       justify-content:space-between;
       align-items: center;
       padding: 0 5px;
+      
     }
 
     .showWeek {
@@ -227,7 +228,6 @@
       background-color: rgb(255, 255, 255);
       border: 1px solid rgb(177, 177, 177);
       box-shadow: 2px 2px black;
-      margin-top: -15px;
       
     }
 
@@ -273,7 +273,6 @@
 
 <div id="weatherApp">
   <form >
-    <button id="recentWeather"><i class="fas fa-home"></i></button>
     <select id="location" onchange="getWeatherInfo()">
       <option value="臺北市">台 北</option>
       <option value="新北市">新 北</option>
@@ -318,10 +317,10 @@
   </div>
 
   <div id="weekWeather"></div>
-
+  
   <div id="recentTime">
-    
     <p id="recent"></p>
+    <button id="recentWeather"><i class="fas fa-redo-alt"></i></button>
   </div>
 
 </div> 
@@ -329,15 +328,14 @@
     <script type="text/javascript">
 
     let today = new Date();
-    let h = ('0'+today.getHours()).substr(-2);
-    let m = ('0'+today.getMinutes()).substr(-2);
-    $("#recent").text(`現在時間   ${h} : ${m}`);
+    // let h = ('0'+today.getHours()).substr(-2);
+    // let m = ('0'+today.getMinutes()).substr(-2);
     let days = today.getDay();
     let todayM = ('0'+(today.getMonth()+1)).substr(-2);
     let todayD = ('0'+today.getDate()).substr(-2);
     // let todayDate = `${today.getFullYear()}-${todayM}-${todayD}`;
     // let datem = ('0'+today.getMonth()).substr(-2)
-    // console.log(todayDate); 
+    // console.log(m); 
     let weekday = new Array(7);
       weekday[0]="SUN";
       weekday[1]="MON";
@@ -346,7 +344,18 @@
       weekday[4]="THU";
       weekday[5]="FRI";
       weekday[6]="SAT";
-      
+
+      function refreshTime(){
+        let retoday = new Date();
+        let h = ('0'+retoday.getHours()).substr(-2);
+        let m = ('0'+retoday.getMinutes()).substr(-2);
+        let s = ('0'+retoday.getSeconds()).substr(-2);
+        $("#recent").text("");
+      $("#recent").text(` 最後更新時間  ${h} : ${m}`);
+      // console.log(m);
+      // setTimeout('refreshTime()',1000);
+    }
+    refreshTime();
     getWeatherInfo();
     changePic();
 // -------------------------AJAX start---------------------------------
@@ -369,8 +378,8 @@
           
           
           // $("#weekWeather").text("");
-          setWeekWeather();
-          function setWeekWeather(){
+      setWeekWeather();
+      function setWeekWeather(){
             $("#weekWeather").text("");
           for (var i =1 ; i < 6 ; i++){
             let wxValue = gotData.weatherElement[6].time[i*2].elementValue[1].value;
@@ -403,22 +412,6 @@
             }
           }
 
-          function changeWeekInfo(e) {
-              let XRain = gotData.weatherElement[0].time[e*2].elementValue[0].value;
-              let XTemp = gotData.weatherElement[1].time[e*2].elementValue[0].value;
-              let XWet = gotData.weatherElement[2].time[e*2].elementValue[0].value;
-              let XStatus = gotData.weatherElement[6].time[e*2].elementValue[0].value;
-              let XStatusValue = gotData.weatherElement[6].time[e*2].elementValue[1].value;
-
-          $(".temp").text(`${XTemp} °`);
-          $("#rainData").text(`${XRain} `);
-          $("#wetData").text(`${XWet} `);
-          $("#todayDate").text(XStatus);
-          $("#todayDate").val(XStatusValue);
-          changePic();
-          $(`#week${e}`).toggleClass("chosenWeek");
-        }
-
         $(".showWeek").click((event)=>{
           event.preventDefault();
             $(".showWeek").attr("class","showWeek");
@@ -426,26 +419,51 @@
             changeWeekInfo(targets);
           });
 
-          $("#recentWeather").click((event)=>{
-            event.preventDefault();
-            getWeatherInfo();
-          });
-        }
+          function changeWeekInfo(e) {
+              let XRain = gotData.weatherElement[0].time[e*2].elementValue[0].value;
+              let XTemp = gotData.weatherElement[1].time[e*2].elementValue[0].value;
+              let XWet = gotData.weatherElement[2].time[e*2].elementValue[0].value;
+              let XStatus = gotData.weatherElement[6].time[e*2].elementValue[0].value;
+              let XStatusValue = gotData.weatherElement[6].time[e*2].elementValue[1].value;
+           console.log(XRain);
+              if (XRain != " "){
+              $(".temp").text(`${XTemp} °`);
+              $("#rainData").text(`${XRain}`);
+              $("#wetData").text(`${XWet} `);
+              $("#todayDate").text(XStatus);
+              $("#todayDate").val(XStatusValue);
+              changePic();
+              $(`#week${e}`).toggleClass("chosenWeek");
+            }else {
+              $(".temp").text(`${XTemp} °`);
+              $("#rainData").text('-');
+              $("#wetData").text(`${XWet} `);
+              $("#todayDate").text(XStatus);
+              $("#todayDate").val(XStatusValue);
+              changePic();
+              $(`#week${e}`).toggleClass("chosenWeek");
+            }
           
+        }
 
-// ------------------------- 將data 帶入-------------------
+        }
+      // -------------setWeekWeather() End--------------
 
+        // -------------------- 將data 帶入-------------------
+      
           $(".temp").text(`${todayTemp} °`);
           $("#rainData").text(`${todayRain} `);
           $("#wetData").text(`${todayWet} `);
           $("#todayDate").text(todayStatus);
           $("#todayDate").val(todayStatusValue);
           changePic();
-
-        }
-      });
+        
     }
-    // --------------------------AJAX End------------------------------
+    // -------------sucess function-----------
+  });
+  // ---------------ajax-------------
+}
+// -------------------------- getWeatherInfo() End------------------------------
 
     
     function changePic(){
@@ -475,7 +493,11 @@
 
   // ------------------------------點擊星期改變事件----------------------
   
-  
+  $("#recentWeather").click((event)=>{
+            event.preventDefault();
+            getWeatherInfo();
+            refreshTime();
+          });
     
     
 
