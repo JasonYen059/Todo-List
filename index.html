@@ -300,7 +300,7 @@
 
   <div id="mainPicture">
     <p id="todayDate"></p>
-    <span class="temp">27 °</span>
+    <span class="temp"></span>
     <img id="sun" src="sun.png">
     <img id="rain" src="rain.gif">
     <img id="wind" src="wind.gif">
@@ -381,14 +381,10 @@
           console.log(gotData);
             
          
-            let date = gotData.weatherElement[0].time[0].startTime;
-            localStorage.setItem("Temp",todayTemp);
-            localStorage.setItem("Location",chooseLocation);
-            localStorage.setItem("TodayRainPOP",todayRain);
-            localStorage.setItem("wx",todayStatus);
-            localStorage.setItem("Date",date);
-            localStorage.setItem("wet",todayWet);
           
+            
+            
+            
           
           // $("#weekWeather").text("");
       setWeekWeather();
@@ -470,6 +466,18 @@
           $("#todayDate").text(todayStatus);
           $("#todayDate").val(todayStatusValue);
           changePic();
+
+          localStorage.setItem("Temp",$(".temp").text());
+          localStorage.setItem("Location",chooseLocation);
+          localStorage.setItem("TodayRainPOP",$("#rainData").text());
+          localStorage.setItem("wx",$("#todayDate").text());
+          localStorage.setItem("wet",$("#wetData").text());
+          let getLoc = localStorage.getItem("Location");
+          let getTemp = localStorage.getItem("Temp");
+          let getPOP = localStorage.getItem("TodayRainPOP");
+          let getWx = localStorage.getItem("wx");
+          let getWet = localStorage.getItem("wet");
+          console.log(getLoc,getTemp,getPOP,getWx,getWet);
         
     }
     // -------------sucess function-----------
