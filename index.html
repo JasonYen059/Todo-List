@@ -379,6 +379,15 @@
           let todayStatusValue = gotData.weatherElement[6].time[0].elementValue[1].value;
           
           console.log(gotData);
+            
+         
+            let date = gotData.weatherElement[0].time[0].startTime;
+            localStorage.setItem("Temp",todayTemp);
+            localStorage.setItem("Location",chooseLocation);
+            localStorage.setItem("TodayRainPOP",todayRain);
+            localStorage.setItem("wx",todayStatus);
+            localStorage.setItem("Date",date);
+            localStorage.setItem("wet",todayWet);
           
           
           // $("#weekWeather").text("");
@@ -505,6 +514,8 @@
             getWeatherInfo();
             refreshTime();
           });
+
+    
     
     
 
