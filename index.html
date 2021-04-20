@@ -330,7 +330,7 @@
 </div> 
 
     <script type="text/javascript">
-
+    let chooseLocation = $("#location").val();
     let today = new Date();
     // let h = ('0'+today.getHours()).substr(-2);
     // let m = ('0'+today.getMinutes()).substr(-2);
@@ -356,21 +356,26 @@
         let s = ('0'+retoday.getSeconds()).substr(-2);
         $("#recent").text("");
       $("#recent").text(` 最後更新時間  ${h} : ${m}`);
-      // console.log(m);
-      // setTimeout('refreshTime()',1000);
     }
+
+    
+
     refreshTime();
-    getWeatherInfo();
+    let getLoc = localStorage.getItem("Location");
+    console.log(getLoc);
+    getWeatherInfo(chooseLocation);
+    
     changePic();
 // -------------------------AJAX start---------------------------------
-    function getWeatherInfo(e){
-      let chooseLocation = $("#location").val();
-
-      $.ajax({
+    function getWeatherInfo(item){
+      
+      item = $("#location").val();
+      
+    $.ajax({
         type: 'GET',
-        url: `https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=CWB-7EA478CF-89E4-4AC4-9C3A-56EC6ABA6354&format=JSON&locationName=${chooseLocation}`,
-        success: function(data){
-          
+        url: `https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=CWB-7EA478CF-89E4-4AC4-9C3A-56EC6ABA6354&format=JSON&locationName=${item}`,
+
+      success: function(data){
           let gotData = data.records.locations[0].location[0];
           let todayRain = gotData.weatherElement[0].time[0].elementValue[0].value;
           let todayTemp = gotData.weatherElement[1].time[0].elementValue[0].value;
@@ -379,14 +384,16 @@
           let todayStatusValue = gotData.weatherElement[6].time[0].elementValue[1].value;
           
           console.log(gotData);
-            
-         
+
+          $(".temp").text(`${todayTemp} °`);
+          $("#rainData").text(`${todayRain} `);
+          $("#wetData").text(`${todayWet} `);
+          $("#todayDate").text(todayStatus);
+          $("#todayDate").val(todayStatusValue);
+          changePic();
+        let pullLoc = $("#location").val();
+          localStorage.setItem("Location",pullLoc);
           
-            
-            
-            
-          
-          // $("#weekWeather").text("");
       setWeekWeather();
       function setWeekWeather(){
             $("#weekWeather").text("");
@@ -434,7 +441,7 @@
               let XWet = gotData.weatherElement[2].time[e*2].elementValue[0].value;
               let XStatus = gotData.weatherElement[6].time[e*2].elementValue[0].value;
               let XStatusValue = gotData.weatherElement[6].time[e*2].elementValue[1].value;
-          //  console.log(XRain);
+          
               if (XRain != " "){
               $(".temp").text(`${XTemp} °`);
               $("#rainData").text(`${XRain}`);
@@ -452,33 +459,19 @@
               changePic();
               $(`#week${e}`).toggleClass("chosenWeek");
             }
-          
-        }
-
+          }
         }
       // -------------setWeekWeather() End--------------
 
-        // -------------------- 將data 帶入-------------------
-      
-          $(".temp").text(`${todayTemp} °`);
-          $("#rainData").text(`${todayRain} `);
-          $("#wetData").text(`${todayWet} `);
-          $("#todayDate").text(todayStatus);
-          $("#todayDate").val(todayStatusValue);
-          changePic();
-
-          localStorage.setItem("Temp",$(".temp").text());
-          localStorage.setItem("Location",chooseLocation);
-          localStorage.setItem("TodayRainPOP",$("#rainData").text());
-          localStorage.setItem("wx",$("#todayDate").text());
-          localStorage.setItem("wet",$("#wetData").text());
-          let getLoc = localStorage.getItem("Location");
-          let getTemp = localStorage.getItem("Temp");
-          let getPOP = localStorage.getItem("TodayRainPOP");
-          let getWx = localStorage.getItem("wx");
-          let getWet = localStorage.getItem("wet");
-          console.log(getLoc,getTemp,getPOP,getWx,getWet);
-        
+        //   $(".temp").text(`${todayTemp} °`);
+        //   $("#rainData").text(`${todayRain} `);
+        //   $("#wetData").text(`${todayWet} `);
+        //   $("#todayDate").text(todayStatus);
+        //   $("#todayDate").val(todayStatusValue);
+        //   changePic();
+        // let pullLoc = $("#location").val();
+        //   localStorage.setItem("Location",pullLoc);
+         
     }
     // -------------sucess function-----------
   });
