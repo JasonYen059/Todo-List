@@ -362,14 +362,16 @@
 
     refreshTime();
     let getLoc = localStorage.getItem("Location");
-    console.log(getLoc);
+        console.log(getLoc);
+        $("#location").val(getLoc);
+        
     getWeatherInfo(chooseLocation);
     
     changePic();
 // -------------------------AJAX start---------------------------------
     function getWeatherInfo(item){
       
-      item = $("#location").val();
+          item = $("#location").val();
       
     $.ajax({
         type: 'GET',
@@ -393,6 +395,7 @@
           changePic();
         let pullLoc = $("#location").val();
           localStorage.setItem("Location",pullLoc);
+        
           
       setWeekWeather();
       function setWeekWeather(){
