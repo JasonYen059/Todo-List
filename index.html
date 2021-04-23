@@ -362,10 +362,13 @@
 
     refreshTime();
     let getLoc = localStorage.getItem("Location");
-        console.log(getLoc);
-        $("#location").val(getLoc);
-        
-    getWeatherInfo(chooseLocation);
+    if (getLoc == null){
+      getLoc = "臺北市";
+    }else {
+      $("#location").val(getLoc);
+    }
+    console.log(getLoc);    
+    getWeatherInfo(getLoc);
     
     changePic();
 // -------------------------AJAX start---------------------------------
